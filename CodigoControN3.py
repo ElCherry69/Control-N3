@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 data = pd.read_csv('data.csv')
 
 # Configuración de la página
-st.title("Explorador de Películas")
+st.title("MAX")
 st.sidebar.header("Opciones de Filtro")
 
 # Filtro de búsqueda de película
@@ -26,14 +26,14 @@ selected_genres = st.sidebar.multiselect("Seleccionar géneros", options=list(al
 filtered_data = filtered_data[filtered_data['genres'].apply(lambda x: any(g in x for g in selected_genres))]
 
 # Selección de columna para el histograma
-hist_column = st.sidebar.selectbox("Seleccionar columna para histograma", ['imdbAverageRating', 'releaseYear'])
+hist_column = st.sidebar.selectbox("Seleccionar columna para histograma", ['Rating', 'releaseYear'])
 
 # Ajuste de bins
 bins = st.sidebar.slider("Número de bins", min_value=5, max_value=50, value=20)
 
 # Mostrar resultados
 st.write(f"### Resultados de búsqueda ({len(filtered_data)} películas encontradas)")
-st.dataframe(filtered_data[['title', 'type', 'genres', 'releaseYear', 'imdbAverageRating']])
+st.dataframe(filtered_data[['title', 'type', 'genres', 'releaseYear', 'Rating']])
 
 # Generar histograma
 st.write(f"### Histograma de {hist_column}")
