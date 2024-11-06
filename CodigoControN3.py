@@ -26,14 +26,14 @@ selected_genres = st.sidebar.multiselect("Seleccionar géneros", options=list(al
 filtered_data = filtered_data[filtered_data['genres'].apply(lambda x: any(g in x for g in selected_genres))]
 
 # Selección de columna para el histograma
-hist_column = st.sidebar.selectbox("Seleccionar columna para histograma", ['Rating', 'releaseYear'])
+hist_column = st.sidebar.selectbox("Seleccionar columna para histograma", ['mdbAverageRating', 'releaseYear'])
 
 # Ajuste de bins
 bins = st.sidebar.slider("Número de bins", min_value=5, max_value=50, value=20)
 
 # Mostrar resultados
 st.write(f"### Resultados de búsqueda ({len(filtered_data)} películas encontradas)")
-st.dataframe(filtered_data[['title', 'type', 'genres', 'releaseYear', 'Rating']])
+st.dataframe(filtered_data[['title', 'type', 'genres', 'releaseYear', 'mdbAverageRating']])
 
 # Generar histograma
 st.write(f"### Histograma de {hist_column}")
