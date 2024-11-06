@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Cargar los datos
-         
 data = pd.read_csv('data.csv')
 
 # Configuración de la página
@@ -20,6 +19,8 @@ selected_type = st.sidebar.multiselect("Seleccionar tipo de contenido", options=
 filtered_data = filtered_data[filtered_data['type'].isin(selected_type)]
 
 # Filtro por género
+# Ignorar valores nulos en la columna 'genres' para evitar errores
+filtered_data = filtered_data.dropna(subset=['genres'])
 all_genres = set(g for sublist in filtered_data['genres'].str.split(', ') for g in sublist)
 selected_genres = st.sidebar.multiselect("Seleccionar géneros", options=list(all_genres), default=list(all_genres))
 filtered_data = filtered_data[filtered_data['genres'].apply(lambda x: any(g in x for g in selected_genres))]
@@ -41,4 +42,3 @@ ax.hist(filtered_data[hist_column].dropna(), bins=bins, color='skyblue', edgecol
 ax.set_xlabel(hist_column)
 ax.set_ylabel("Frecuencia")
 st.pyplot(fig)
-
