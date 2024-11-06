@@ -39,6 +39,6 @@ st.dataframe(filtered_data[['title', 'type', 'genres', 'releaseYear', 'imdbAvera
 st.write(f"### Histograma de {hist_column}")
 fig, ax = plt.subplots()
 ax.hist(filtered_data[hist_column].dropna(), bins=bins, color='skyblue', edgecolor='black')
-ax.set_xlabel(Rating)
+ax.set_xlabel(hist_column)
 ax.set_ylabel("Frecuencia")
 st.pyplot(fig)
