@@ -2,10 +2,6 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-st.write(""
-# MAX
-## Grafico de peliculas de MAX
-""")
 # Cargar los datos
          
 data = pd.read_csv('data.csv')
