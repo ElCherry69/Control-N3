@@ -10,7 +10,7 @@ st.title("MAX")
 st.sidebar.header("Opciones de Filtro")
 
 # Filtro de búsqueda de película
-search_title = st.sidebar.text_input("Buscar película por título")
+search_title = st.sidebar.text_input("Buscar película")
 filtered_data = data[data['title'].str.contains(search_title, case=False, na=False)]
 
 # Filtro por tipo de contenido
@@ -39,6 +39,6 @@ st.dataframe(filtered_data[['title', 'type', 'genres', 'releaseYear', 'imdbAvera
 st.write(f"### Histograma de {hist_column}")
 fig, ax = plt.subplots()
 ax.hist(filtered_data[hist_column].dropna(), bins=bins, color='skyblue', edgecolor='black')
-ax.set_xlabel(hist_column)
+ax.set_xlabel(Rating)
 ax.set_ylabel("Frecuencia")
 st.pyplot(fig)
