@@ -10,7 +10,7 @@ st.title("MAX")
 st.sidebar.header("Opciones de Filtro")
 
 # Filtro de búsqueda de película
-search_title = st.sidebar.text_input("Buscar película")
+search_title = st.sidebar.text_input("Buscar película o serie")
 filtered_data = data[data['title'].str.contains(search_title, case=False, na=False)]
 
 # Filtro por tipo de contenido
