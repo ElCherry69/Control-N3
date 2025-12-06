@@ -1,18 +1,8 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-
-# -----------------------------------------------------------
-# Cargar datos
-# -----------------------------------------------------------
 df = pd.read_csv("datos.csv")
-
-# Asegurar formato de fecha correcto
 df["Fecha"] = pd.to_datetime(df["Fecha"])
-
-# -----------------------------------------------------------
-# Configuración general del sitio
-# -----------------------------------------------------------
 st.title("Análisis Interactivo de Horas de Luz en Cuatro Ciudades del Mundo")
 
 st.write(
@@ -23,17 +13,6 @@ st.write(
     """
 )
 
-st.write(
-    """
-    **Guía de uso:**
-    - Use el primer selector para graficar *una* de las tres curvas (Salida, Puesta o Duración) para **todas** las ciudades.
-    - Use el segundo selector para graficar **todas** las curvas simultáneamente (Salida, Puesta y Duración), pero solo para **una** ciudad seleccionada.
-    """
-)
-
-# -----------------------------------------------------------
-# Gráfico 1: Selección de curva para todas las ciudades
-# -----------------------------------------------------------
 st.subheader("Comparación entre ciudades para una variable")
 
 opcion_var = st.selectbox(
@@ -62,10 +41,6 @@ ax1.legend()
 plt.xticks(rotation=45)
 
 st.pyplot(fig1)
-
-# -----------------------------------------------------------
-# Gráfico 2: Todas las curvas para una ciudad
-# -----------------------------------------------------------
 st.subheader("Curvas completas para una ciudad")
 
 opcion_ciudad = st.selectbox(
