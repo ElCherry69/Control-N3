@@ -2,43 +2,79 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# -----------------------------------------------------------
+# Cargar datos
+# -----------------------------------------------------------
+df = pd.read_csv("datos.csv")
 
-data = pd.read_csv('data.csv')
+# -----------------------------------------------------------
+# Configuración general del sitio
+# -----------------------------------------------------------
+st.title("Análisis Interactivo de Horas de Luz en Cuatro Ciudades del Mundo")
 
+st.write(
+    """
+    Este aplicativo permite analizar los datos de salida del sol, puesta del sol y duración del día
+    registrados semanalmente para Santiago (Chile), Singapur, Tokio y Oslo.
+    El objetivo es visualizar cómo varían estas horas a lo largo del año y compararlas entre países.
+    """
+)
 
-st.title("MAX")
-st.sidebar.header("Opciones de Filtro")
+st.write(
+    """
+    **Guía de uso:**
+    - Use el primer selector para graficar *una* de las tres curvas (Salida, Puesta o Duración) para **todas** las ciudades.
+    - Use el segundo selector para graficar **todas** las curvas simultáneamente (Salida, Puesta y Duración), pero solo para **una** ciudad seleccionada.
+    """
+)
 
+# -----------------------------------------------------------
+# Gráfico 1: Selección de curva para todas las ciudades
+# -----------------------------------------------------------
+st.subheader("Comparación entre ciudades para una variable")
 
-search_title = st.sidebar.text_input("Buscar película o serie")
-filtered_data = data[data['title'].str.contains(search_title, case=False, na=False)]
+opcion_var = st.selectbox(
+    "Seleccione la variable a graficar:",
+    ["Salida", "Puesta", "Duración"]
+)
 
+fig1, ax1 = plt.subplots(figsize=(10, 5))
 
-content_types = filtered_data['type'].unique()
-selected_type = st.sidebar.multiselect("Seleccionar tipo de contenido", options=content_types, default=content_types)
-filtered_data = filtered_data[filtered_data['type'].isin(selected_type)]
+for ciudad, color in zip(["Chile", "Singapur", "Tokio", "Oslo"], ["blue", "magenta", "gold", "red"]):
+    df_ciudad = df[df["Ciudad"] == ciudad]
+    ax1.plot(df_ciudad["Fecha"], df_ciudad[opcion_var], label=ciudad, color=color)
 
+ax1.set_title(f"Curva de {opcion_var} para todas las ciudades")
+az1 = ax1
+ax1.set_xlabel("Fecha")
+ax1.set_ylabel(f"{opcion_var} (h)")
+ax1.legend()
+plt.xticks(rotation=45)
+st.pyplot(fig1)
 
+# -----------------------------------------------------------
+# Gráfico 2: Todas las curvas para una ciudad
+# -----------------------------------------------------------
+st.subheader("Curvas completas para una ciudad")
 
-filtered_data = filtered_data.dropna(subset=['genres'])
-all_genres = set(g for sublist in filtered_data['genres'].str.split(', ') for g in sublist)
-selected_genres = st.sidebar.multiselect("Seleccionar géneros", options=list(all_genres), default=list(all_genres))
-filtered_data = filtered_data[filtered_data['genres'].apply(lambda x: any(g in x for g in selected_genres))]
+opcion_ciudad = st.selectbox(
+    "Seleccione la ciudad a graficar:",
+    ["Chile", "Singapur", "Tokio", "Oslo"]
+)
 
+fig2, ax2 = plt.subplots(figsize=(10, 5))
 
-hist_column = st.sidebar.selectbox("Seleccionar columna para histograma", ['imdbAverageRating', 'releaseYear'])
+colores = {"Salida": "blue", "Puesta": "red", "Duración": "green"}
 
+df_sel = df[df["Ciudad"] == opcion_ciudad]
 
-bins = st.sidebar.slider("Número de bins", min_value=5, max_value=50, value=20)
+for var in ["Salida", "Puesta", "Duración"]:
+    ax2.plot(df_sel["Fecha"], df_sel[var], label=var, color=colores[var])
 
+ax2.set_title(f"Curvas de Salida, Puesta y Duración para {opcion_ciudad}")
+ax2.set_xlabel("Fecha")
+ax2.set_ylabel("Horas (h)")
+ax2.legend()
+plt.xticks(rotation=45)
 
-st.write(f"### Resultados de búsqueda ({len(filtered_data)} películas encontradas)")
-st.dataframe(filtered_data[['title', 'type', 'genres', 'releaseYear', 'imdbAverageRating']])
-
-
-st.write(f"### Histograma de {hist_column}")
-fig, ax = plt.subplots()
-ax.hist(filtered_data[hist_column].dropna(), bins=bins, color='skyblue', edgecolor='black')
-ax.set_xlabel(hist_column)
-ax.set_ylabel("Frecuencia")
-st.pyplot(fig)
+st.pyplot(fig2)
