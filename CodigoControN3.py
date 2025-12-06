@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 df = pd.read_csv("datos.csv")
 df["Fecha"] = pd.to_datetime(df["Fecha"])
-st.title("Análisis Interactivo de Horas de Luz en Cuatro Ciudades del Mundo")
+st.title("Analisis con graficos")
 
 st.write(
     """
