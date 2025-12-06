@@ -9,7 +9,6 @@ st.write(
     """
     Este aplicativo permite analizar los datos de salida del sol, puesta del sol y duración del día
     registrados semanalmente para Santiago (Chile), Singapur, Tokio y Oslo.
-    El objetivo es visualizar cómo varían estas horas a lo largo del año y compararlas entre países.
     """
 )
 
