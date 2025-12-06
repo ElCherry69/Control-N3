@@ -7,6 +7,9 @@ import matplotlib.pyplot as plt
 # -----------------------------------------------------------
 df = pd.read_csv("datos.csv")
 
+# Asegurar formato de fecha correcto
+df["Fecha"] = pd.to_datetime(df["Fecha"])
+
 # -----------------------------------------------------------
 # Configuración general del sitio
 # -----------------------------------------------------------
@@ -40,16 +43,24 @@ opcion_var = st.selectbox(
 
 fig1, ax1 = plt.subplots(figsize=(10, 5))
 
-for ciudad, color in zip(["Chile", "Singapur", "Tokio", "Oslo"], ["blue", "magenta", "gold", "red"]):
-    df_ciudad = df[df["Ciudad"] == ciudad]
-    ax1.plot(df_ciudad["Fecha"], df_ciudad[opcion_var], label=ciudad, color=color)
+colores_ciudades = {
+    "Chile": "blue",
+    "Singapur": "magenta",
+    "Tokio": "yellow",
+    "Oslo": "red"
+}
+
+for ciudad in ["Chile", "Singapur", "Tokio", "Oslo"]:
+    df_c = df[df["Ciudad"] == ciudad]
+    if not df_c.empty:
+        ax1.plot(df_c["Fecha"], df_c[opcion_var], label=ciudad, color=colores_ciudades[ciudad])
 
 ax1.set_title(f"Curva de {opcion_var} para todas las ciudades")
-az1 = ax1
 ax1.set_xlabel("Fecha")
 ax1.set_ylabel(f"{opcion_var} (h)")
 ax1.legend()
 plt.xticks(rotation=45)
+
 st.pyplot(fig1)
 
 # -----------------------------------------------------------
@@ -64,12 +75,12 @@ opcion_ciudad = st.selectbox(
 
 fig2, ax2 = plt.subplots(figsize=(10, 5))
 
-colores = {"Salida": "blue", "Puesta": "red", "Duración": "green"}
+colores_vars = {"Salida": "blue", "Puesta": "red", "Duración": "green"}
 
 df_sel = df[df["Ciudad"] == opcion_ciudad]
 
 for var in ["Salida", "Puesta", "Duración"]:
-    ax2.plot(df_sel["Fecha"], df_sel[var], label=var, color=colores[var])
+    ax2.plot(df_sel["Fecha"], df_sel[var], label=var, color=colores_vars[var])
 
 ax2.set_title(f"Curvas de Salida, Puesta y Duración para {opcion_ciudad}")
 ax2.set_xlabel("Fecha")
@@ -78,3 +89,4 @@ ax2.legend()
 plt.xticks(rotation=45)
 
 st.pyplot(fig2)
+
